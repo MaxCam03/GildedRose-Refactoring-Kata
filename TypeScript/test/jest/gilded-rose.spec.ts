@@ -96,4 +96,23 @@ describe('GildedRose Characterization Tests', () => {
     });
   });
 
+  describe('Conjured Items (Nueva Funcionalidad)', () => {
+    it('14. Conjured degrada el doble de rápido (2) antes del sellIn', () => {
+      const gildedRose = new GildedRose([new Item('Conjured Mana Cake', 5, 20)]);
+      const items = gildedRose.updateQuality();
+      expect(items[0].quality).toBe(18);
+    });
+
+    it('15. Conjured degrada el cuádruple de rápido (4) tras pasar el sellIn', () => {
+      const gildedRose = new GildedRose([new Item('Conjured Mana Cake', 0, 20)]);
+      const items = gildedRose.updateQuality();
+      expect(items[0].quality).toBe(16);
+    });
+
+    it('16. La quality de Conjured nunca cae por debajo de cero', () => {
+      const gildedRose = new GildedRose([new Item('Conjured Mana Cake', 5, 1)]);
+      const items = gildedRose.updateQuality();
+      expect(items[0].quality).toBe(0);
+    });
+  });
 });
