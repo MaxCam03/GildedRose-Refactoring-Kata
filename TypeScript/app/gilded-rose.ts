@@ -59,9 +59,25 @@ class BackstagePassUpdater extends ItemUpdater {
   }
 }
 
+// AQUÍ ESTÁ EL MÓDULO 3: Creamos la nueva clase para Conjured
+class ConjuredItemUpdater extends ItemUpdater {
+  update() {
+    this.item.sellIn -= 1;
+    // Degrada 2 normalmente, o 4 si ya pasó el sellIn (el doble que el normal)
+    const degradation = this.item.sellIn < 0 ? 4 : 2; 
+    this.item.quality = Math.max(0, this.item.quality - degradation);
+  }
+}
+
 // 4. Factory para orquestar la creación
 export class UpdaterFactory {
   static create(item: Item): ItemUpdater {
+    // AQUÍ ESTÁ EL MÓDULO 3: Le enseñamos al Factory a reconocer Conjured
+    // Usamos 'includes' por si el nombre es "Conjured Mana Cake" u otro
+    if (item.name.includes('Conjured')) {
+      return new ConjuredItemUpdater(item);
+    }
+
     switch (item.name) {
       case AGED_BRIE:
         return new AgedBrieUpdater(item);
@@ -75,7 +91,7 @@ export class UpdaterFactory {
   }
 }
 
-// 5. La clase original simplificada (¡Cumple SOLID y Open/Closed!)
+// 5. La clase original simplificada
 export class GildedRose {
   items: Array<Item>;
 
